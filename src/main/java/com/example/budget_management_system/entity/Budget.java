@@ -25,6 +25,9 @@ public class Budget {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     
+    @OneToOne(mappedBy = "budget", cascade = CascadeType.ALL)
+    private BudgetSummary budgetSummary;
+    
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL)
     private List<Expense> expenses;
 
@@ -54,6 +57,9 @@ public class Budget {
     
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
+    
+    public BudgetSummary getBudgetSummary() { return budgetSummary; }
+    public void setBudgetSummary(BudgetSummary budgetSummary) { this.budgetSummary = budgetSummary; }
     
     public List<Expense> getExpenses() { return expenses; }
     public void setExpenses(List<Expense> expenses) { this.expenses = expenses; }

@@ -15,15 +15,17 @@ public class DataInitializer implements CommandLineRunner {
     private final LocationRepository locationRepository;
     private final UserRepository userRepository;
     private final BudgetRepository budgetRepository;
+    private final BudgetSummaryRepository budgetSummaryRepository;
     private final CategoryRepository categoryRepository;
     private final ExpenseRepository expenseRepository;
 
     public DataInitializer(LocationRepository locationRepository, UserRepository userRepository,
-                          BudgetRepository budgetRepository, CategoryRepository categoryRepository,
-                          ExpenseRepository expenseRepository) {
+                          BudgetRepository budgetRepository, BudgetSummaryRepository budgetSummaryRepository,
+                          CategoryRepository categoryRepository, ExpenseRepository expenseRepository) {
         this.locationRepository = locationRepository;
         this.userRepository = userRepository;
         this.budgetRepository = budgetRepository;
+        this.budgetSummaryRepository = budgetSummaryRepository;
         this.categoryRepository = categoryRepository;
         this.expenseRepository = expenseRepository;
     }
@@ -83,6 +85,14 @@ public class DataInitializer implements CommandLineRunner {
         budget3.setUser(user2);
         budgetRepository.saveAll(Arrays.asList(budget1, budget2, budget3));
 
+        BudgetSummary summary1 = new BudgetSummary(new BigDecimal("9500"), new BigDecimal("40500"), 19.0, 3);
+        summary1.setBudget(budget1);
+        BudgetSummary summary2 = new BudgetSummary(new BigDecimal("0"), new BigDecimal("100000"), 0.0, 0);
+        summary2.setBudget(budget2);
+        BudgetSummary summary3 = new BudgetSummary(new BigDecimal("4000"), new BigDecimal("56000"), 6.67, 1);
+        summary3.setBudget(budget3);
+        budgetSummaryRepository.saveAll(Arrays.asList(summary1, summary2, summary3));
+
         Expense expense1 = new Expense("Grocery shopping", new BigDecimal("5000"), LocalDate.now());
         expense1.setBudget(budget1);
         expense1.setCategories(Arrays.asList(food));
@@ -99,6 +109,6 @@ public class DataInitializer implements CommandLineRunner {
 
         System.out.println("Rwanda administrative structure initialized successfully!");
         System.out.println("Unified Location entity with LocationType enum");
-        System.out.println("Sample data: 2 Provinces, 2 Districts, 3 Sectors, 3 Cells, 4 Villages, 4 Users");
+        System.out.println("Sample data: 2 Provinces, 2 Districts, 3 Sectors, 3 Cells, 4 Villages, 4 Users, 3 Budgets with Summaries");
     }
 }
