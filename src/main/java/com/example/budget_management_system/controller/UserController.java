@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/users")
@@ -19,8 +20,14 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        return ResponseEntity.ok(userService.createUser(user));
+    public ResponseEntity<User> createUser(@RequestBody Map<String, Object> request) {
+        String username = (String) request.get("username");
+        String email = (String) request.get("email");
+        String fullName = (String) request.get("fullName");
+        Long locationId = Long.valueOf(request.get("locationId").toString());
+        
+        User user = userService.createUser(username, email, fullName, locationId);
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping

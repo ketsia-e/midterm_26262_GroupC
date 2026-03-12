@@ -1,6 +1,8 @@
 package com.example.budget_management_system.service;
 
+import com.example.budget_management_system.entity.Location;
 import com.example.budget_management_system.entity.User;
+import com.example.budget_management_system.repository.LocationRepository;
 import com.example.budget_management_system.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,18 +16,30 @@ import java.util.List;
 public class UserService {
     
     private final UserRepository userRepository;
+    private final LocationRepository locationRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, LocationRepository locationRepository) {
         this.userRepository = userRepository;
+        this.locationRepository = locationRepository;
     }
 
-    public User createUser(User user) {
-        if (userRepository.existsByUsername(user.getUsername())) {
+    public User createUser(String username, String email, String fullName, Long locationId) {
+        if (userRepository.existsByUsername(username)) {
             throw new RuntimeException("Username already exists");
         }
-        if (userRepository.existsByEmail(user.getEmail())) {
+        if (userRepository.existsByEmail(email)) {
             throw new RuntimeException("Email already exists");
         }
+        
+        Location location = locationRepository.findById(locationId)
+                .orElseThrow(() -> new RuntimeException("Location not found with id: " + locationId));
+        
+        User user = new User();
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setFullName(fullName);
+        user.setLocation(location);
+        
         return userRepository.save(user);
     }
 

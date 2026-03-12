@@ -1,5 +1,6 @@
 package com.example.budget_management_system.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -29,6 +30,7 @@ public class Budget {
     private BudgetSummary budgetSummary;
     
     @OneToMany(mappedBy = "budget", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Expense> expenses;
 
     public Budget() {}

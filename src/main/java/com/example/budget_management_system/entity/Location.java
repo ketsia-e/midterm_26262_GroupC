@@ -1,5 +1,6 @@
 package com.example.budget_management_system.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -25,9 +26,11 @@ public class Location {
     private Location parent;
     
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Location> children;
     
     @OneToMany(mappedBy = "location", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<User> users;
 
     public Location() {}
