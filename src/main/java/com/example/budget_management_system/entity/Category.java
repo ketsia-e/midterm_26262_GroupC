@@ -1,10 +1,14 @@
 package com.example.budget_management_system.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "categories")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,6 +20,7 @@ public class Category {
     private String description;
     
     @ManyToMany(mappedBy = "categories")
+    @JsonIgnore
     private List<Expense> expenses;
 
     public Category() {}

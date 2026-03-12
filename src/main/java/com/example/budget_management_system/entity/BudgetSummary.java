@@ -1,5 +1,6 @@
 package com.example.budget_management_system.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 
@@ -17,6 +18,7 @@ public class BudgetSummary {
     
     @OneToOne
     @JoinColumn(name = "budget_id", unique = true, nullable = false)
+    @JsonIgnore
     private Budget budget;
 
     public BudgetSummary() {}

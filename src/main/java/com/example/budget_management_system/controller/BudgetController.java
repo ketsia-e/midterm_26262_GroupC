@@ -6,6 +6,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/budgets")
 public class BudgetController {
@@ -17,8 +21,15 @@ public class BudgetController {
     }
 
     @PostMapping
-    public ResponseEntity<Budget> createBudget(@RequestBody Budget budget) {
-        return ResponseEntity.ok(budgetService.createBudget(budget));
+    public ResponseEntity<Budget> createBudget(@RequestBody Map<String, Object> request) {
+        String budgetName = (String) request.get("budgetName");
+        BigDecimal totalAmount = new BigDecimal(request.get("totalAmount").toString());
+        LocalDate startDate = LocalDate.parse((String) request.get("startDate"));
+        LocalDate endDate = LocalDate.parse((String) request.get("endDate"));
+        Long userId = Long.valueOf(request.get("userId").toString());
+        
+        Budget budget = budgetService.createBudget(budgetName, totalAmount, startDate, endDate, userId);
+        return ResponseEntity.ok(budget);
     }
 
     @GetMapping
@@ -34,5 +45,22 @@ public class BudgetController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity.ok(budgetService.getBudgetsByUser(userId, page, size));
+    }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<Budget> updateBudget(@PathVariable Long id, @RequestBody Map<String, Object> request) {
+        String budgetName = (String) request.get("budgetName");
+        BigDecimal totalAmount = new BigDecimal(request.get("totalAmount").toString());
+        LocalDate startDate = LocalDate.parse((String) request.get("startDate"));
+        LocalDate endDate = LocalDate.parse((String) request.get("endDate"));
+        
+        Budget budget = budgetService.updateBudget(id, budgetName, totalAmount, startDate, endDate);
+        return ResponseEntity.ok(budget);
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<Budget> getBudgetById(@PathVariable Long id) {
+        Budget budget = budgetService.getBudgetById(id);
+        return ResponseEntity.ok(budget);
     }
 }
